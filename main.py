@@ -1,5 +1,6 @@
 import pandas as pd
 from fastapi import FastAPI, Query
+from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 from typing import List
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -16,7 +17,6 @@ tfidf_vectorizer = TfidfVectorizer(stop_words='english', max_features=5000)
 tfidf_matrix = tfidf_vectorizer.fit_transform(data['book_content'])
 
 # --- Search and Recommendation Functions ---
-
 def multi_field_search(query, data):
     mask = (
         data['title'].str.lower().str.contains(query.lower()) |
@@ -40,7 +40,7 @@ def find_best_match(query, data):
 def get_recommendations(book_query, tfidf_matrix=tfidf_matrix, data=data):
     matches = find_best_match(book_query, data)
     if matches.empty:
-        return []
+        return [], ""
     idx = matches.index[0]
     query_vec = tfidf_matrix[idx]
     cosine_similarities = linear_kernel(query_vec, tfidf_matrix).flatten()
@@ -52,8 +52,15 @@ def get_recommendations(book_query, tfidf_matrix=tfidf_matrix, data=data):
     return recommendations.to_dict(orient='records'), matches.iloc[0]['title']
 
 # --- FastAPI App ---
-
 app = FastAPI(title="Book Recommendation API")
+
+# Root route to avoid 404 on "/"
+@app.get("/", response_class=HTMLResponse)
+def root():
+    return """
+    <h2>📚 Book Recommendation API</h2>
+    <p>Use the <code>/recommend?q=your+book+title</code> endpoint to get recommendations.</p>
+    """
 
 class BookRecommendationResponse(BaseModel):
     matched_title: str
