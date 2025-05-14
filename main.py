@@ -54,7 +54,7 @@ def find_best_match(query, data):
 def get_recommendations(book_query, tfidf_matrix=tfidf_matrix, data=data):
     matches = find_best_match(book_query, data)
     if matches.empty:
-        return []
+        return [], ""
     idx = matches.index[0]
     query_vec = tfidf_matrix[idx]
     cosine_similarities = linear_kernel(query_vec, tfidf_matrix).flatten()
@@ -80,13 +80,10 @@ def recommend_books(q: str = Query(..., description="Book title or author to sea
         return {"matched_title": "", "recommendations": []}
     return {"matched_title": matched_title, "recommendations": recs}
 
-# --- Root Route ---
-@app.get("/", response_class=HTMLResponse)
-def root():
-    return """
-    <h2>📚 Book Recommendation API</h2>
-    <p>Use the <code>/recommend?q=your+book+title</code> endpoint to get recommendations.</p>
-    """
+# --- Simple JSON Root Endpoint ---
+@app.get("/")
+def read_root():
+    return {"message": "Welcome to the Book Recommendation API"}
 
 # --- Uvicorn Entry Point for Render ---
 if __name__ == "__main__":
