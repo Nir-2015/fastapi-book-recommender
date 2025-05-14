@@ -28,9 +28,20 @@ def multi_field_search(query, data):
     return data[mask]
 
 def fuzzy_search(query, data, limit=3):
-    choices = (data['title'] + ' ' + data['authors']).tolist()
-    results = process.extract(query, choices, limit=limit, score_cutoff=60)
-    matched_indices = [idx for _, _, idx in results]
+    # Fuzzy match on title
+    title_results = process.extract(
+        query, data['title'].fillna('').tolist(), limit=limit, score_cutoff=60
+    )
+    title_indices = {idx for _, _, idx in title_results}
+    
+    # Fuzzy match on authors
+    author_results = process.extract(
+        query, data['authors'].fillna('').tolist(), limit=limit, score_cutoff=60
+    )
+    author_indices = {idx for _, _, idx in author_results}
+    
+    # Combine indices from both matches
+    matched_indices = list(title_indices | author_indices)
     return data.iloc[matched_indices]
 
 def find_best_match(query, data):
