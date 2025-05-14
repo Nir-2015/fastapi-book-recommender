@@ -7,7 +7,7 @@ from sklearn.metrics.pairwise import linear_kernel
 from rapidfuzz import process
 
 # --- Load and preprocess data ---
-data = pd.read_csv(r"C:\Users\NIRMAL\Downloads\books_data.csv")
+data = pd.read_csv("books_data.csv")
 data = data.dropna(subset=['title', 'authors'], how='all')
 data['average_rating'] = pd.to_numeric(data['average_rating'], errors='coerce')
 data['book_content'] = data['title'].fillna('') + ' ' + data['authors'].fillna('')
