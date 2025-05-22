@@ -74,7 +74,6 @@ License
 This project is licensed under the MIT License.
 find the original file on Google Drive: [Click here to view](https://drive.google.com/file/d/1Zo0FYlKvWBtg6Ca_etscNeeNhPC-1Gz_/view?usp=sharing)
 
-## Documentation
 The project documentation is written in LaTeX and hosted on Overleaf. Use the links below to access it:
 
 - [Edit Documentation](https://www.overleaf.com/project/rybrkxbqsfch/edit) (requires an Overleaf account to edit)
@@ -82,4 +81,4 @@ The project documentation is written in LaTeX and hosted on Overleaf. Use the li
 
 [![Overleaf](https://img.shields.io/badge/Overleaf-Edit%20LaTeX-47A141)](https://www.overleaf.com/project/rybrkxbqsfch/edit)
 
-## Getting Started
+
